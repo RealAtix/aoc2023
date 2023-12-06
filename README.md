@@ -10,3 +10,6 @@ Once again using [nom](https://docs.rs/nom/latest/nom/), a combinator parser fra
 
 ## Day 3
 I don't like the number duplication in the hashmap but I'm too lazy to rewrite it again.
+
+## Day 4
+
