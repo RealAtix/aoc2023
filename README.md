@@ -13,3 +13,5 @@ I don't like the number duplication in the hashmap but I'm too lazy to rewrite i
 
 ## Day 4
 
+## Day 5
+
