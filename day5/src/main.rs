@@ -91,17 +91,8 @@ fn input() -> (Vec<i64>, Vec<Map>) {
     (seeds, maps)
 }
 
-fn main() {
-    let time = Instant::now();
-    let (seeds, maps) = input();
-    // dbg!(&seeds, &maps);
-    part1(&seeds, &maps);
-    // part2(&input);
-    println!("Time elapsed is {:?}", time.elapsed())
-}
-
-fn part1(seeds: &[i64], maps: &[Map]) {
-    let result = seeds
+fn find_lowest_location(seeds: &[i64], maps: &[Map]) -> Option<i64> {
+    seeds
         .iter()
         .map(|&seed| {
             maps.iter().fold(seed, |src, map| {
@@ -113,10 +104,27 @@ fn part1(seeds: &[i64], maps: &[Map]) {
                 src
             })
         })
-        .min();
+        .min()
+}
+
+fn main() {
+    let time = Instant::now();
+    let (seeds, maps) = input();
+    part1(&seeds, &maps);
+    part2(&seeds, &maps);
+    println!("Time elapsed is {:?}", time.elapsed())
+}
+
+fn part1(seeds: &[i64], maps: &[Map]) {
+    let result = find_lowest_location(seeds, maps);
     println!("Part 1 answer: {:?}", result.unwrap());
 }
 
-// fn part2(input: &[String]) {
-//     // println!("Part 2 answer: {:?}", result);
-// }
+fn part2(seeds: &[i64], maps: &[Map]) {
+    let seeds = seeds
+        .chunks(2)
+        .flat_map(|range| (range[0]..range[0] + range[1]).collect_vec())
+        .collect_vec();
+    let result = find_lowest_location(seeds.as_ref(), maps);
+    println!("Part 2 answer: {:?}", result.unwrap());
+}
