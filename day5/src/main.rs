@@ -1,6 +1,7 @@
 use std::{io::BufRead, time::Instant};
 
 use itertools::Itertools;
+use rayon::iter::{IntoParallelRefIterator, ParallelIterator};
 
 type Range = (i64, usize);
 
@@ -93,7 +94,7 @@ fn input() -> (Vec<i64>, Vec<Map>) {
 
 fn find_lowest_location(seeds: &[i64], maps: &[Map]) -> Option<i64> {
     seeds
-        .iter()
+        .par_iter()
         .map(|&seed| {
             maps.iter().fold(seed, |src, map| {
                 for (i, (src_start, range_length)) in map.src_ranges.iter().enumerate() {
