@@ -15,3 +15,6 @@ I don't like the number duplication in the hashmap but I'm too lazy to rewrite i
 
 ## Day 5
 Chose the lazy way for part 2, ideally instead of mapping source seed to target value I would map the entire interval.
+
+## Day 6
+
