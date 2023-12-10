@@ -1,7 +1,10 @@
 use std::{io::BufRead, time::Instant};
 
+use itertools::Itertools;
+
 #[derive(Debug, Copy, Clone, Eq, PartialEq, PartialOrd, Ord)]
 enum Card {
+    Joker = 0,
     Two = 2,
     Three = 3,
     Four = 4,
@@ -22,6 +25,7 @@ impl TryFrom<char> for Card {
 
     fn try_from(c: char) -> Result<Self, Self::Error> {
         match c {
+            'j' => Ok(Card::Joker),
             '2' => Ok(Card::Two),
             '3' => Ok(Card::Three),
             '4' => Ok(Card::Four),
@@ -66,10 +70,10 @@ impl TryFrom<[Card; 5]> for HandType {
         for card in cards {
             counts[card as usize] += 1;
         }
-        let (uniques, max) = counts.iter().fold((0, 0), |(uniques, max), value| {
+        let (uniques, max) = counts[1..].iter().fold((0, 0), |(uniques, max), value| {
             (uniques + usize::from(value > &0), max.max(*value))
         });
-        let hand_type = match max {
+        let hand_type = match max + counts[0] {
             5 => HandType::FiveOfAKind,
             4 => HandType::FourOfAKind,
             3 => {
@@ -92,11 +96,17 @@ impl TryFrom<[Card; 5]> for HandType {
     }
 }
 
-fn input() -> Vec<Hand> {
+fn input() -> Vec<String> {
     std::io::stdin()
         .lock()
         .lines()
         .map_while(Result::ok)
+        .collect()
+}
+
+fn parse_hands(lines: &[String]) -> Vec<Hand> {
+    lines
+        .iter()
         .filter_map(|line| {
             let (cards, bid) = line.split_once(' ')?;
             let bid: i32 = bid.parse().ok()?;
@@ -119,22 +129,28 @@ fn input() -> Vec<Hand> {
 
 fn main() {
     let time = Instant::now();
-    let mut input = input();
-    input.sort_unstable();
-    part1(&input);
-    // part2(&input);
+    let input = input();
+
+    let mut hands = parse_hands(&input);
+    hands.sort_unstable();
+    result(1, &hands);
+
+    let input = input
+        .iter()
+        .map(|line| line.replace('J', "j"))
+        .collect_vec();
+    let mut hands = parse_hands(&input);
+    hands.sort_unstable();
+    result(2, &hands);
+
     println!("Time elapsed is {:?}", time.elapsed())
 }
 
-fn part1(input: &[Hand]) {
-    let result: i32 = input
+fn result(part: i8, hands: &[Hand]) {
+    let result: i32 = hands
         .iter()
         .enumerate()
         .map(|(i, hand)| (i + 1) as i32 * hand.bid)
         .sum();
-    println!("Part 1 answer: {:?}", result);
+    println!("Part {} answer: {:?}", part, result);
 }
-
-// fn part2(input: &[String]) {
-//     // println!("Part 2 answer: {:?}", solve(input));
-// }
