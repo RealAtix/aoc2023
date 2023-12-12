@@ -24,3 +24,5 @@ Chose the lazy way for part 2, ideally instead of mapping source seed to target 
 
 ## Day 9
 
+## Day 10
+
