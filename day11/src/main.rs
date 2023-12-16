@@ -35,14 +35,6 @@ fn input() -> (GalaxyPairs, HashSet<usize>, HashSet<usize>) {
     (pairs, expand_rows, expand_cols)
 }
 
-// fn get_expanded_point(
-//     original: usize,
-//     expansions: &HashSet<usize>,
-//     expansion_factor: usize,
-// ) -> usize {
-//     original + (expansions.iter().filter(|&&e| e < original).count() * expansion_factor)
-// }
-
 fn get_shortest_galaxy_paths(
     galaxy_pairs: &GalaxyPairs,
     expand_rows: &HashSet<usize>,
